@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>GreenSpace - Cart</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #e8f5e9;
+      color: #333;
+    }
+    header {
+      background-color: #2e7d32;
+      color: white;
+      padding: 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 1rem;
+    }
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    .container {
+      max-width: 900px;
+      margin: 2rem auto;
+      background: white;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .cart-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #ccc;
+      padding: 1rem 0;
+    }
+    .cart-item h4 {
+      margin: 0;
+    }
+    .cart-item p {
+      margin: 0.3rem 0;
+    }
+    .cart-total {
+      text-align: right;
+      margin-top: 1.5rem;
+      font-size: 1.2rem;
+      font-weight: bold;
+    }
+    .btn {
+      background-color: #43a047;
+      color: white;
+      padding: 0.8rem 1.5rem;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin: 1rem 0 0 auto;
+      display: block;
+    }
+    .btn.clear {
+      background-color: #d32f2f;
+    }
+    .empty {
+      text-align: center;
+      padding: 2rem;
+      font-size: 1.2rem;
+      color: #777;
+    }
+    footer {
+      text-align: center;
+      padding: 1rem;
+      background-color: #2e7d32;
+      color: white;
+      margin-top: 2rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>GreenSpace</h1>
+    <nav>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="shop.html">Shop</a></li>
+        <li><a href="about.html">About</a></li>
+                   <li><a href="contact.html">contact</a></li>
+
+        <li><a href="cart.html">Cart</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <div class="container" id="cartContainer">
+    <!-- Cart content will be injected here -->
+  </div>
+
+  <footer>
+    <p>&copy; 2025 GreenSpace. All rights reserved.</p>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const container = document.getElementById('cartContainer');
+      const cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+      if (cart.length === 0) {
+        container.innerHTML = `<div class="empty">Your cart is empty. <br><a href="shop.html">Start shopping</a></div>`;
+        return;
+      }
+
+      let total = 0;
+      let cartHTML = '<h2>Your Cart</h2>';
+
+      cart.forEach(item => {
+        const subtotal = item.price * item.quantity;
+        total += subtotal;
+        cartHTML += `
+          <div class="cart-item">
+            <div>
+              <h4>${item.name}</h4>
+              <p>Price: ₹${item.price}</p>
+              <p>Quantity: ${item.quantity}</p>
+            </div>
+            <div>
+              ₹${subtotal}
+            </div>
+          </div>
+        `;
+      });
+
+      cartHTML += `
+        <div class="cart-total">Total: ₹${total}</div>
+        <button class="btn" onclick="checkout()">Proceed to Checkout</button>
+        <button class="btn clear" onclick="clearCart()">Clear Cart</button>
+      `;
+
+      container.innerHTML = cartHTML;
+    });
+
+    function clearCart() {
+      localStorage.removeItem('cart');
+      location.reload();
+    }
+
+    function checkout() {
+      alert("Thank you! Your order has been placed.");
+      localStorage.removeItem('cart');
+      location.href = "index.html";
+    }
+  </script>
+</body>
+</html>
